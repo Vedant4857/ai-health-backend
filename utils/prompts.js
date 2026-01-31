@@ -80,3 +80,13 @@ Rules:
 Doctor's advice:
 ${text}
 `;
+export const detectLanguagePrompt = (text) => `
+Detect the language of the following text.
+Return one of: hi, gu, mr, en
+
+Text:
+"${text}"
+
+Return JSON only:
+{ "language": "" }
+`;
