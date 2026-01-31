@@ -24,5 +24,17 @@ router.post("/risk", async (req, res) => {
   const risk = await assessRisk(conversation);
   res.json(risk);
 });
+router.post("/start", async (req, res) => {
+  try {
+    const { spokenText } = req.body;
+    const data = await extractSymptoms(spokenText);
+    res.json(data);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({
+      message: "AI service unavailable. Please try again later.",
+    });
+  }
+});
 
 export default router;

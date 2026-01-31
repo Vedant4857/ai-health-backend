@@ -13,18 +13,24 @@ function applySafety(riskResult) {
 }
 
 // MAIN RISK FUNCTION
+function safeParseJSON(text) {
+  const cleaned = text
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+
+  return JSON.parse(cleaned);
+}
+
 export async function assessRisk(conversation) {
   const result = await textModel.generateContent(
     riskAssessmentPrompt(conversation),
   );
 
-  const riskResult = JSON.parse(result.response.text());
+  const riskResult = safeParseJSON(result.response.text());
 
-  // ✅ APPLY SAFETY CHECK
   const safety = applySafety(riskResult);
-  if (safety) {
-    return safety;
-  }
+  if (safety) return safety;
 
   return riskResult;
 }
